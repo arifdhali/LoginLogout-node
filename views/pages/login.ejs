@@ -1,0 +1,65 @@
+<!-- Header -->
+<%- include('../components/header') %>
+
+    <!-- Body -->
+    <div class="main-panel">
+        <div class="container">
+            <!-- Create -->
+            <div class="container__form container--signup">
+                <form action="/create" method="post" class="form" id="form1">
+                    <h2 class="form__title">Create new account</h2>
+                    <div class="form-field">
+                        <input type="text" placeholder="User" name="username" class="input" />
+                        <small><!-- Error will be shown here--></small>
+                    </div>
+                    <div class="form-field">
+                        <input type="email" placeholder="Email" name="email" class="input" />
+                        <small><!-- Error will be shown here--></small>
+                    </div>
+                    <div class="form-field">
+                        <input type="password" placeholder="Password" name="password" class="input" />
+                        <small><!-- Error will be shown here--></small>
+                    </div>
+
+                    <div class="form-field">
+                        <input type="password" placeholder="Confirm-password" name="confirm-password"
+                            class="input confirm-password" />
+                        <small><!-- Error will be shown here--></small>
+                    </div>
+                    <button class="btn" type="submit">Create</button>
+                </form>
+            </div>
+
+            <!-- Login In -->
+            <div class="container__form container--signin">
+                <form action="/login" method="post" class="form" id="form2">
+                    <h2 class="form__title">Log In</h2>
+
+                    <div class="form-field">
+                        <input type="email" placeholder="Email" name="email" class="input" />
+                        <small>Error will be shown here</small>
+                    </div>
+                    <div class="form-field">
+                        <input type="password" placeholder="Password" name="password" class="input" />
+                        <small>Error will be shown here</small>
+                    </div>
+                    <a href="#" class="link">Forgot your password?</a>
+                    <button class="btn">Log In</button>
+                </form>
+            </div>
+
+            <!-- Overlay -->
+            <div class="container__overlay">
+                <div class="overlay">
+                    <div class="overlay__panel overlay--left">
+                        <button class="btn" id="signIn">Log In</button>
+                    </div>
+                    <div class="overlay__panel overlay--right">
+                        <button class="btn" id="signUp">Create</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Footer -->
+    <%- include('../components/footer') %>
