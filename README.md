@@ -1,4 +1,4 @@
-ALL DEPENDENCIES THAT I HAVE USE IN THIS PROJECT, YOU CAN DOWNLOAD I USING NPM LIKE npm I <all package name>. Thank you very much.
+ALL DEPENDENCIES THAT I HAVE USE IN THIS PROJECT, YOU CAN DOWNLOAD I USING NPM LIKE npm i all packages-name. Thank you very much.
 "dependencies": {
     body-parser
     dotenv
