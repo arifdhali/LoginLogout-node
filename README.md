@@ -1,9 +1,10 @@
+ALL DEPENDENCIES THAT I HAVE USE IN THIS PROJECT, YOU CAN DOWNLOAD I USING NPM LIKE npm I <all package name>. Thank you very much.
 "dependencies": {
-    "body-parser": "^1.20.2",
-    "dotenv": "^16.4.5",
-    "ejs": "^3.1.9",
-    "express": "^4.18.2",
-    "express-session": "^1.18.0",
-    "mysql": "^2.18.1",
-    "nodemon": "^3.1.0"
+    body-parser
+    dotenv
+    ejs
+    express
+    express-session
+    mysql
+    nodemon
   }
