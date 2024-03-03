@@ -4,6 +4,10 @@ const bodyParser = require('body-parser');
 const dotenv = require('dotenv').config();
 const connection = require('./db/db-config');
 const session = require('express-session');
+<<<<<<< HEAD
+=======
+
+>>>>>>> f11d9c8a97baa3e50ce45ef575a5cba345a10db0
 
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.static(__dirname + '/public'));
@@ -11,6 +15,7 @@ app.use(express.static(__dirname + '/public'));
 app.set('view engine', 'ejs');
 
 app.use(session({
+<<<<<<< HEAD
     secret: 'testing form12',
     resave: true,
     saveUninitialized: true,
@@ -72,6 +77,31 @@ app.post("/login", (req, res) => {
     });
 });
 
+=======
+    secret: "secret",
+    resave: false,
+    saveUninitialized: true,
+}))
+
+
+app.get("/", (req, res) => {
+    res.render("pages/index", [{ title: "Login page" }]);
+
+
+})
+app.post("/login", (req, res) => {
+    const { email, password } = req.body;
+    console.log(email, password);
+    res.render("pages/index", [{ title: "Login page" }]);
+
+
+})
+
+
+
+
+
+>>>>>>> f11d9c8a97baa3e50ce45ef575a5cba345a10db0
 const PORT = process.env.PORT || 4000;
 app.listen(PORT, () => {
     console.log(`Server listening on http://localhost:${PORT}`);
