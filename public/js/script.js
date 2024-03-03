@@ -79,7 +79,7 @@ firstForm.addEventListener("submit", function (e) {
 });
 
 secondForm.addEventListener("submit", function (e) {
-	e.preventDefault();
+	// e.preventDefault();
 
 	let input = secondForm.querySelectorAll("input");
 	checkEmpty(input);

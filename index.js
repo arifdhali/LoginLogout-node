@@ -3,53 +3,72 @@ const app = express();
 const bodyParser = require('body-parser');
 const dotenv = require('dotenv').config();
 const connection = require('./db/db-config');
-
+const session = require('express-session');
 
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.static(__dirname + '/public'));
 
 app.set('view engine', 'ejs');
 
-app.get('/', (req, res) => {
-    res.render('pages/login');
+app.use(session({
+    secret: 'testing form12',
+    resave: true,
+    saveUninitialized: true,
+}));
+
+// Middleware to check if the user is authenticated before accessing /dashboard
+const authenticateUser = (req, res, next) => {
+    if (req.session && req.session.user) {
+        next();
+    } else {
+        res.redirect('/');
+    }
+};
+
+// Middleware to redirect to /dashboard if the user is already authenticated
+const redirectToDashboardIfAuthenticated = (req, res, next) => {
+    if (req.session && req.session.user) {
+        res.redirect('/dashboard');
+    } else {
+        next();
+    }
+};
+
+// Apply the redirectToDashboardIfAuthenticated middleware to / and /login routes
+app.get("/", redirectToDashboardIfAuthenticated, (req, res) => {
+    res.render("pages/login");
+});
+app.get("/login", redirectToDashboardIfAuthenticated, (req, res) => {
+    res.render("pages/login");
 });
 
-
-app.get('/dashboard', (req, res) => {
-    res.render('pages/dashboard');
+app.get("/dashboard", authenticateUser, (req, res) => {
+    res.render("pages/dashboard");
 });
 
-
-app.post('/login', (req, res) => {
+app.post("/login", (req, res) => {
     const { email, password } = req.body;
+    let emailPassQuery = 'SELECT * FROM users WHERE email = ?';
 
-    connection.query('SELECT * FROM users WHERE email = ? AND password = ?', [email, password], (err, results) => {
+    // checking to the db
+    connection.query(emailPassQuery, [email], (err, result) => {
         if (err) {
-            console.error('Error querying database: ' + err.stack);
-            res.send('An error occurred');
-            return;
+            return res.status(500).json({ error: "Internal server error" });
         }
 
-        if (results.length > 0) {
-            res.redirect("/dashboard");
+        if (result.length > 0) {
+            let storedPass = result[0].password;
+
+            if (storedPass === password) {
+                // Set user session
+                req.session.user = email;
+                res.status(200).redirect("/dashboard");
+            } else {
+                res.status(401).json({ success: false, message: "Invalid password" });
+            }
         } else {
-            res.render('pages/login', results);
+            res.status(404).json({ success: false, message: "User not found" });
         }
-    });
-});
-
-
-app.post('/create', (req, res) => {
-    const { username, email, password } = req.body;
-    let insertSQL = 'INSERT INTO users (username,email,password) VALUES(?,?,?)';
-    connection.query(insertSQL, [username, email, password], (err, result) => {
-
-        if (err) {
-            console.log("Error inserting");
-        } else {
-            res.redirect("dashboard");
-        }
-
     });
 });
 
