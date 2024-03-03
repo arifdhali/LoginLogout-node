@@ -4,10 +4,6 @@ const bodyParser = require('body-parser');
 const dotenv = require('dotenv').config();
 const connection = require('./db/db-config');
 const session = require('express-session');
-<<<<<<< HEAD
-=======
-
->>>>>>> f11d9c8a97baa3e50ce45ef575a5cba345a10db0
 
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.static(__dirname + '/public'));
@@ -15,7 +11,6 @@ app.use(express.static(__dirname + '/public'));
 app.set('view engine', 'ejs');
 
 app.use(session({
-<<<<<<< HEAD
     secret: 'testing form12',
     resave: true,
     saveUninitialized: true,
@@ -41,14 +36,27 @@ const redirectToDashboardIfAuthenticated = (req, res, next) => {
 
 // Apply the redirectToDashboardIfAuthenticated middleware to / and /login routes
 app.get("/", redirectToDashboardIfAuthenticated, (req, res) => {
-    res.render("pages/login");
+    res.render("pages/index");
 });
 app.get("/login", redirectToDashboardIfAuthenticated, (req, res) => {
-    res.render("pages/login");
+    res.render("pages/index");
+});
+app.get("/register", authenticateUser, (req, res) => {
+    res.render("pages/dashboard");
 });
 
 app.get("/dashboard", authenticateUser, (req, res) => {
     res.render("pages/dashboard");
+});
+// logout 
+app.get("/logout", authenticateUser, (req, res) => {
+    req.session.destroy((err) => {
+        if (err) {
+            return res.status(500).json({ error: "Internal server error" });
+        } else {
+            res.redirect('/');
+        }
+    })
 });
 
 app.post("/login", (req, res) => {
@@ -76,32 +84,24 @@ app.post("/login", (req, res) => {
         }
     });
 });
+// register users
+app.post("/register", (req, res) => {
+    const { username, email, password } = req.body;
+    let sendingDataQuery = 'INSERT INTO users (username, email, password) VALUES (?, ?, ?)';
 
-=======
-    secret: "secret",
-    resave: false,
-    saveUninitialized: true,
-}))
-
-
-app.get("/", (req, res) => {
-    res.render("pages/index", [{ title: "Login page" }]);
-
-
-})
-app.post("/login", (req, res) => {
-    const { email, password } = req.body;
-    console.log(email, password);
-    res.render("pages/index", [{ title: "Login page" }]);
-
-
-})
+    // sending to the db
+    connection.query(sendingDataQuery, [username, email, password], (err, result) => {
+        if (err) {
+            return res.status(500).json({ error: "Internal server error" });
+        } else {
+            req.session.user = email;
+            res.redirect("/dashboard");
+        }
+    });
+});
 
 
 
-
-
->>>>>>> f11d9c8a97baa3e50ce45ef575a5cba345a10db0
 const PORT = process.env.PORT || 4000;
 app.listen(PORT, () => {
     console.log(`Server listening on http://localhost:${PORT}`);
